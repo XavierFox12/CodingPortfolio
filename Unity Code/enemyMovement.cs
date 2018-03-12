@@ -1,25 +1,35 @@
-﻿using UnityEngine;
+﻿/*********************************************************************
+ * Created by: Xavier Fox
+ * Script Name: enemyMovement.cs
+ * Game Name: Fleeing Night
+ * Last Modified: 24 April, 2017
+ *********************************************************************/
+
+using UnityEngine;
 using System.Collections;
 
-public class enemyMovement : MonoBehaviour {
+public class enemyMovement : MonoBehaviour
+{
+    // Public variables
+	public Transform target1, target2, target3;                     // Holds the transform values for the 3 targets that the enemies are chasing
+    public int moveSpeed;                                           // The speed of the enemy 
+	public int rotationSpeed;                                       // The rotation speed of the enemy
 
-	public Transform target1, target2, target3;
-    public int moveSpeed;
-	public int rotationSpeed;
-    private int carHealth, player1Health, player2Health;
-	private GameObject car;
-	private GameObject player1;
-    private GameObject player2;
-	private Transform myTransform;
+    // Private variables
+    private int carHealth, player1Health, player2Health;            // Holds the health of the two players and the car
+	private GameObject car;                                         // Reference to the car gameobject
+	private GameObject player1;                                     // Reference to the player1 gameobject
+    private GameObject player2;                                     // Reference to the player2 gameobject
+	private Transform myTransform;                                  // Holds the transform of the enemy
 
 	void Awake() {
+        // Sets myTransform to enemies starting position transform
 		myTransform = transform;
 	}
 
 	void Start () {
+        // Sets the targets transfrom to be where the players and car are located
         car = GameObject.FindGameObjectWithTag ("Car");
-		//player1 = Car.Player1;
-        //player2 = Car.Player2;
         Debug.Log(car == null);
         Debug.Log(player1 == null);
 		target1 = car.transform;
@@ -28,10 +38,13 @@ public class enemyMovement : MonoBehaviour {
 	}
 
 	void Update () {
+        // Gets the cars health component
         carHealth = car.GetComponent<Car>().health;
+
+        // The enemy is able to track player1 based on where he is on the screen and stops
+        // following him if his health reaches 0
         if (Car.Player1 != null)
         {
-            Debug.Log("HIIIIIIII");
             player1Health = Car.Player1.GetComponent<playerMovement>().health;
             Vector3 dir = target2.position - myTransform.position;
             dir.z = 0.0f;
@@ -55,7 +68,8 @@ public class enemyMovement : MonoBehaviour {
             player2Health = Car.Player2.GetComponent<playerMovement>().health;
         }
 
-        //The enemy is able to track the car
+        // The enemy is able to track the car based on where the car is located on the screen
+        // and stops following the car if the cars health is 0
         if (carHealth > 0)
         {
             Vector3 dir = target1.position - myTransform.position;
@@ -78,7 +92,8 @@ public class enemyMovement : MonoBehaviour {
 
 
 
-        //The enemy is able to track player2
+        // The enemy is able to track player2 based on where he is on the screen and stops
+        // following him if his health reaches 0
         if (player2Health > 0)
         {
             Vector3 dir = target3.position - myTransform.position;
